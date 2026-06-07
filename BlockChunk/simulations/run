@@ -1,0 +1,4 @@
+#!/bin/sh
+cd `dirname $0`
+../src/blockchunk -n .:../src $*
+# for shared lib, use: opp_run -l ../src/blockchunk -n .:../src $*

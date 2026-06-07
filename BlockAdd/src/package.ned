@@ -1,0 +1,3 @@
+package blockadd;
+
+@license(LGPL);

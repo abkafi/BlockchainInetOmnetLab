@@ -1,0 +1,25 @@
+# Eclipse
+.metadata/
+.settings/
+
+# OMNeT++ build outputs
+out/
+bin/
+
+# Simulation results
+results/
+*.vec
+*.vci
+*.sca
+
+# Generated objects
+*.o
+*.o.d
+
+# Python
+.venv/
+
+# QtEnv
+.qtenvrc
+#File
+GIT.md

@@ -1,0 +1,3 @@
+package mempoolapp;
+
+@license(LGPL);

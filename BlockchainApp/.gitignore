@@ -1,0 +1,5 @@
+out/
+.metadata/
+.settings/
+*.log
+*.oppbuildspec.bak

@@ -1,0 +1,3 @@
+package blockchainapp;
+
+@license(LGPL);
