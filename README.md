@@ -1,6 +1,11 @@
 Blockchain Simulation using OMNeT++ 6.4 and INET 4.6
+
 Step-by-Step Laboratory Manual with Theory, Descriptions, and Code Snippets
-Lab 1: Minimal UDP Application
+
+Lab 1:
+
+Minimal UDP Application
+
 Objective: Learn ApplicationBase, UdpSocket, packet transmission and packet reception.
 Brief Description:
 A UDP application is the foundation of the blockchain simulator. Students learn how to bind a socket, send packets and receive packets using the INET framework.
@@ -16,7 +21,11 @@ void socketDataArrived(UdpSocket *socket, Packet *packet)
     delete packet;
 }
 Expected Result: Students should observe the successful execution of the described functionality in the simulation output window.
-Lab 2: Echo Application
+
+Lab 2: 
+
+Echo Application
+
 Objective: Implement request-response communication.
 Brief Description:
 Host1 sends a packet to Host2. Host2 receives it and sends an echo reply back. This introduces client-server communication.
@@ -25,7 +34,9 @@ Code Snippet:
 auto echoPacket = new Packet("EchoKafi");
 socket->sendTo(echoPacket, destinationAddress, destinationPort);
 Expected Result: Students should observe the successful execution of the described functionality in the simulation output window.
-Lab 3: BlockAdd (Transaction Message)
+
+Lab 3:
+BlockAdd (Transaction Message)
 Objective: Create blockchain transactions using FieldsChunk.
 Brief Description:
 Blockchain transactions are represented as structured messages rather than plain packet names.
@@ -39,7 +50,11 @@ tx->setAmount(100.5);
 auto packet = new Packet("Transaction");
 packet->insertAtBack(tx);
 Expected Result: Students should observe the successful execution of the described functionality in the simulation output window.
-Lab 4: MempoolApp
+
+Lab 4:
+
+MempoolApp
+
 Objective: Store incoming transactions.
 Brief Description:
 A mempool stores pending transactions before they are included in a block.
@@ -53,7 +68,10 @@ struct TransactionInfo {
 
 std::vector<TransactionInfo> mempool;
 Expected Result: Students should observe the successful execution of the described functionality in the simulation output window.
-Lab 5: BlockChunk
+
+Lab 5:
+BlockChunk
+
 Objective: Represent blockchain blocks.
 Brief Description:
 Transactions are grouped into blocks. Each block contains metadata such as block ID and previous hash.
@@ -64,7 +82,10 @@ block->setPrevHash(0);
 block->setNonce(1234);
 block->setTxCount(3);
 Expected Result: Students should observe the successful execution of the described functionality in the simulation output window.
-Lab 6: BlockchainApp
+
+Lab 6: 
+BlockchainApp
+
 Objective: Implement blockchain node behavior.
 Brief Description:
 A blockchain node receives transactions, stores them in a mempool, mines blocks, and propagates blocks.
@@ -74,7 +95,10 @@ if (mempool.size() >= 3)
     createBlock();
 }
 Expected Result: Students should observe the successful execution of the described functionality in the simulation output window.
-Lab 7: Multi-Node Blockchain Network
+
+Lab 7: 
+Multi-Node Blockchain Network
+
 Objective: Create a distributed blockchain network.
 Brief Description:
 Multiple nodes exchange transactions and blocks to maintain a synchronized blockchain.
