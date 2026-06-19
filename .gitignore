@@ -1,4 +1,10 @@
-# Eclipse
+out/
+results/
+*.vec
+*.sca
+*.elog
+*.o
+*.so# Eclipse
 .metadata/
 .settings/
 
