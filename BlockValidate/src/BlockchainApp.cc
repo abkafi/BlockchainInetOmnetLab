@@ -135,6 +135,19 @@ void BlockchainApp::socketDataArrived(
                 << block->getTxCount()
                 << "\n";
 
+        bool valid =
+            validateBlock(
+                block->getPrevHash());
+
+        if (valid)
+        {
+            EV_INFO << "VALID BLOCK\n";
+        }
+        else
+        {
+            EV_INFO << "INVALID BLOCK\n";
+        }
+
         delete packet;
         return;
     }
@@ -278,6 +291,14 @@ void BlockchainApp::broadcastBlock(
                     << blockId
                     << endl;
         }
+bool BlockchainApp::validateBlock(int prevHash)
+{
+    if (blockchain.empty())
+        return (prevHash == 0);
+
+    return (prevHash ==
+            blockchain.back().blockHash);
+}
 
 void BlockchainApp::finish()
 {

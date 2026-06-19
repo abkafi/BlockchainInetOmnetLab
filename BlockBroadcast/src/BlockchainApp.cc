@@ -27,6 +27,31 @@ void BlockchainApp::initialize(int stage)
         destAddress =
             L3AddressResolver().resolve(par("destAddress"));
 
+
+        if (strcmp(hostName, "host1") == 0)
+        {
+            peers.push_back(
+                L3AddressResolver().resolve("host2"));
+
+            peers.push_back(
+                L3AddressResolver().resolve("host3"));
+        }
+        else if (strcmp(hostName, "host2") == 0)
+        {
+            peers.push_back(
+                L3AddressResolver().resolve("host1"));
+
+            peers.push_back(
+                L3AddressResolver().resolve("host3"));
+        }
+        else if (strcmp(hostName, "host3") == 0)
+        {
+            peers.push_back(
+                L3AddressResolver().resolve("host1"));
+
+            peers.push_back(
+                L3AddressResolver().resolve("host2"));
+        }
         socket.setOutputGate(gate("socketOut"));
         socket.bind(localPort);
 
@@ -135,6 +160,39 @@ void BlockchainApp::socketDataArrived(
                 << block->getTxCount()
                 << "\n";
 
+        bool valid =
+            validateBlock(
+                block->getPrevHash());
+
+        if (valid)
+        {
+            EV_INFO << "VALID BLOCK\n";
+
+            Block receivedBlock;
+
+            receivedBlock.blockId =
+                block->getBlockId();
+
+            receivedBlock.previousBlockHash =
+                block->getPrevHash();
+
+            receivedBlock.blockHash =
+                block->getHash();
+
+            receivedBlock.timestamp =
+                simTime();
+
+            blockchain.push_back(receivedBlock);
+
+            EV_INFO << "BLOCK ADDED TO LOCAL CHAIN\n";
+
+            printBlockchain();
+        }
+        else
+        {
+            EV_INFO << "INVALID BLOCK\n";
+        }
+
         delete packet;
         return;
     }
@@ -199,11 +257,11 @@ void BlockchainApp::mineBlock()
 
        blockchain.push_back(block);
 
-       broadcastBlock(
-               block.blockId,
-               block.previousBlockHash,
-               block.blockHash,
-               block.transactions.size());
+       broadcastBlockToPeers(
+           block.blockId,
+           block.previousBlockHash,
+           block.blockHash,
+           block.transactions.size());
 
        printBlockchain();
 
@@ -278,6 +336,48 @@ void BlockchainApp::broadcastBlock(
                     << blockId
                     << endl;
         }
+bool BlockchainApp::validateBlock(int prevHash)
+{
+    if (blockchain.empty())
+        return (prevHash == 0);
+
+    return (prevHash ==
+            blockchain.back().blockHash);
+}
+void BlockchainApp::broadcastBlockToPeers(
+        int blockId,
+        int prevHash,
+        int hash,
+        int txCount)
+{
+    for (auto peer : peers)
+    {
+        auto block =
+            makeShared<BlockChunk>();
+
+        block->setBlockId(blockId);
+        block->setPrevHash(prevHash);
+        block->setHash(hash);
+        block->setTxCount(txCount);
+
+        block->setChunkLength(B(32));
+
+        auto packet =
+            new Packet("Block");
+
+        packet->insertAtBack(block);
+
+        socket.sendTo(packet,
+                      peer,
+                      destPort);
+
+        EV_INFO << "BLOCK "
+                << blockId
+                << " SENT TO "
+                << peer
+                << endl;
+    }
+}
 
 void BlockchainApp::finish()
 {

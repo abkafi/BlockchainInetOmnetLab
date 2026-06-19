@@ -50,10 +50,6 @@ void BlockchainApp::initialize(int stage)
 
 void BlockchainApp::handleMessageWhenUp(cMessage *msg)
 {
-    EV_INFO << "handleMessageWhenUp(): "
-                << msg->getName()
-                << endl;
-
     if (msg == sendTimer) {
 
         sendTransaction();
@@ -281,11 +277,8 @@ void BlockchainApp::broadcastBlock(
 
 void BlockchainApp::finish()
 {
-    if (sendTimer)
-           cancelAndDelete(sendTimer);
-
-       if (mineTimer)
-           cancelAndDelete(mineTimer);
+    cancelAndDelete(sendTimer);
+    cancelAndDelete(mineTimer);
 }
 void BlockchainApp::handleStartOperation(LifecycleOperation *operation)
 {
